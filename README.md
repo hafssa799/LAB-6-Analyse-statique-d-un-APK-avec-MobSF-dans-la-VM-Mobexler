@@ -93,7 +93,7 @@ L'objectif de ce laboratoire est de réaliser l'analyse statique détaillée d'u
 
 
 ## Étape 9 : Rédaction du mini-rapport d'audit
-Consultez le fichier `rapport_final.md` pour le résumé exécutif complet et détaillé des vulnérabilités et des recommandations.
+Consultez le fichier `Rapport MOBSF.pdf` pour le résumé exécutif complet et détaillé des vulnérabilités et des recommandations.
 
 ## Conclusion 
 
