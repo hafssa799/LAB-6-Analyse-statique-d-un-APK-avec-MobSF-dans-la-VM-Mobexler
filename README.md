@@ -95,3 +95,18 @@ L'objectif de ce laboratoire est de réaliser l'analyse statique détaillée d'u
 ## Étape 9 : Rédaction du mini-rapport d'audit
 Consultez le fichier `rapport_final.md` pour le résumé exécutif complet et détaillé des vulnérabilités et des recommandations.
 
+## Conclusion 
+
+Ce laboratoire a consisté à analyser statiquement une application Android (app-debug.apk) à l’aide de MobSF dans la VM Mobexler.
+
+L’analyse a permis d’identifier plusieurs vulnérabilités, notamment :
+
+Des mauvaises configurations du manifeste (mode debug activé, sauvegarde autorisée)
+
+Des permissions sensibles augmentant la surface d’attaque
+
+Des communications non sécurisées (cleartext)
+
+La présence possible de secrets codés en dur
+
+La corrélation avec le standard OWASP MASVS a aidé à classifier et comprendre les risques.
