@@ -45,7 +45,7 @@ L'objectif de ce laboratoire est de réaliser l'analyse statique détaillée d'u
 2. Sélection de l'APK (`app-debug.apk`).
 3. Attente de la fin de l'analyse et affichage du tableau de bord global avec le "Security Score".
    
-![](https://github.com/user-attachments/assets/15f5c480-0721-42ff-96d8-4f3e3a67ec38)
+![](https://github.com/user-attachments/assets/14431e21-da6e-4bc4-8e6a-246bcb9ed500)
 
 
 ## Étape 4 : Analyse du manifeste et des permissions
@@ -81,9 +81,9 @@ L'objectif de ce laboratoire est de réaliser l'analyse statique détaillée d'u
 2. Identification des guides de test liés (MASTG) pour confirmer les vulnérabilités trouvées de façon statique.
 
 > **Note :** Insérez ici une capture d'écran ou un extrait de votre fichier de corrélation MASVS.
-> ![Capture d'écran - Corrélation MASVS](./screenshots/etape7_masvs.png)
 
----
+![](https://github.com/user-attachments/assets/c0f8317b-4079-46b1-96e4-bc220f348569)
+
 
 ## Étape 8 : Exportation et analyse du rapport complet
 1. Dans l'interface web, clic sur **Generate PDF Report** pour obtenir le rapport détaillé.
