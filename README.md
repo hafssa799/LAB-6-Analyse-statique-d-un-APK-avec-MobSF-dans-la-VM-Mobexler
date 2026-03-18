@@ -101,12 +101,14 @@ Ce laboratoire a consisté à analyser statiquement une application Android (app
 
 L’analyse a permis d’identifier plusieurs vulnérabilités, notamment :
 
-Des mauvaises configurations du manifeste (mode debug activé, sauvegarde autorisée)
+ -Des mauvaises configurations du manifeste (mode debug activé, sauvegarde autorisée)
 
-Des permissions sensibles augmentant la surface d’attaque
+ -Des permissions sensibles augmentant la surface d’attaque
 
-Des communications non sécurisées (cleartext)
+ -Des communications non sécurisées (cleartext)
 
-La présence possible de secrets codés en dur
+ -La présence possible de secrets codés en dur
 
-La corrélation avec le standard OWASP MASVS a aidé à classifier et comprendre les risques.
+ -La corrélation avec le standard OWASP MASVS a aidé à classifier et comprendre les risques.
+ 
+ En résumé, ce lab montre que l’analyse statique est essentielle pour détecter rapidement les failles, mais doit être complétée par d’autres tests pour garantir la sécurité globale de l’application.
