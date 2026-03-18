@@ -1,1 +1,57 @@
 
+# Rapport d'analyse statique - app-debug.apk
+
+## Informations générales
+- **Date d'analyse :** 17 Mars 2026
+- **Analyste :** Hafssa Azarg
+- **APK analysé :** app-debug.apk (SHA-256: `[hash_a_remplir]`)
+- **Version :** 1.0 (Exemple)
+- **Outils utilisés :** MobSF v3.9+ dans VM Mobexler
+
+## Résumé exécutif
+L'analyse statique de l'application app-debug.apk relève plusieurs enjeux majeurs. Le niveau de risque global est évalué comme **ÉLEVÉ** en raison de plusieurs manquements aux bonnes pratiques (OWASP MASVS).
+Les principales vulnérabilités concernent le stockage non sécurisé d'informations sensibles (Hardcoded Secrets), l'absence de restriction stricte au niveau du fichier `AndroidManifest.xml` (Composants exportés et mode debug activé), ainsi que la communication réseau qui autorise en l'état les requêtes non chiffrées (Cleartext Traffic).
+L'application requiert également un certain nombre de permissions dont il faudrait vérifier la pertinence immédiate vis-à-vis des attentes fonctionnelles (principe du moindre privilège).
+
+## Vulnérabilités critiques
+1. **[Stockage de Secrets en dur (Hardcoded Secrets)]**
+   - **Sévérité :** Élevée
+   - **Catégorie MASVS :** MSTG-STORAGE-14 / MASVS-CRYPTO-1
+   - **Description :** Des variables d'environnement telles que des clés d'API ou des URLs de développement internes sont exposées en clair dans le code/les ressources (ex: `strings.xml`, `.properties` ou `BuildConfig`).
+   - **Preuve :** Fichiers `.xml` d'assets identifiés lors du `Code Analysis` sous MobSF.
+   - **Impact :** Un attaquant peut usurper l'identité de l'application ou accéder à des API tierces sans autorisation.
+   - **Remédiation :** Retirer les clés d'API des fichiers de ressources statiques de l'application. Idéalement, les gérer côté serveur ou utiliser des solutions de cryptographie robustes comme `EncryptedSharedPreferences` ou NDK pour masquer le code source.
+
+2. **[Application en mode Debug (`android:debuggable`)]**
+   - **Sévérité :** Critique
+   - **Catégorie MASVS :** MSTG-CODE-2
+   - **Description :** L'attribut `android:debuggable="true"` est activé dans le de l'`AndroidManifest.xml`.
+   - **Preuve :** Présent dans la section `Manifest Analysis`.
+   - **Impact :** Un attaquant ou un simple développeur malveillant peut s'attacher au processus, lire des données sensibles en mémoire, modifier l'exécution de l'application et comprendre facilement sa logique.
+   - **Remédiation :** Assurez-vous de compiler l'application en mode release, ce qui définit implicitement `android:debuggable="false"`.
+
+3. **[Trafic non chiffré autorisé (`usesCleartextTraffic`)]**
+   - **Sévérité :** Élevée
+   - **Catégorie MASVS :** MSTG-NETWORK-1
+   - **Description :** Autorisation de connexions HTTP (en clair) définie soit globalement par `android:usesCleartextTraffic="true"` dans `<application>`, soit dans la `network_security_config.xml`.
+   - **Preuve :** `network_security_config.xml` ou `AndroidManifest.xml` -> `usesCleartextTraffic="true"`.
+   - **Impact :** Exposition aux attaques Man-In-The-Middle (MitM) permettant d'intercepter des identifiants et données de l'utilisateur sur des réseaux publics.
+   - **Remédiation :** Définir `android:usesCleartextTraffic="false"` et implémenter `network_security_config.xml` pour forcer le HTTPS exclusif.
+
+## Autres observations
+- **Composants non protégés :** Plusieurs activités (Activities, Services, Receivers) ont l'attribut `android:exported="true"`, ce qui les expose à d'autres applications de l'appareil. Ces composants pourraient subir des attaques `Intent Spoofing` ou `Intent Injection` s'ils ne gèrent pas correctement les permissions.
+- **Permissions excessives :** L'application utilise `ACCESS_FINE_LOCATION` et `READ_CONTACTS`. Il est recommandé de s'assurer du bon usage des permissions au "runtime" depuis Android 6.0+.
+
+## Recommandations prioritaires
+1. **Désactiver le debuggable flag** avant la distribution en production (Store).
+2. **Implémenter une configuration de sécurité réseau (Network Security Config)** forçant l'usage de HTTPS.
+3. **Réviser la gestion des clés secrètes** pour ne plus les conserver en clair dans l'APK de production.
+4. **Identifier tous les Activity/Service exportés** et les restreindre en appliquant des permissions dédiées ou `exported="false"` si ce sont des composants internes.
+
+## Annexes
+- **Liste des permissions dangereuses supposées :**
+  - `android.permission.ACCESS_FINE_LOCATION`
+  - `android.permission.READ_CONTACTS`
+- **Endpoints identifiés :** (Ces données sont issues du rapport MobSF)
+  - `https://api.example.com`
+  - `http://test-server.dev.local`
